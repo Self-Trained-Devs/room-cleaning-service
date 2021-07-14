@@ -1,0 +1,16 @@
+.header {
+	display: flex;
+}
+
+.main {
+	padding-left:5%;
+	padding-top: 25px;
+	display: flex-grow;
+}
+
+.logout {
+	display: flex-grow;
+	padding-left: 60%;
+	padding-top:25px;
+	float: right;
+}

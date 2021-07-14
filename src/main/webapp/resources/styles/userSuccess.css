@@ -1,0 +1,27 @@
+
+
+.header2 {
+	display: flex;
+}
+
+.bookService {
+	padding:10px;
+	display: flex-grow;
+}
+
+.bookingStatus1 {
+	padding:10px;
+	display: flex-grow;
+}
+.address{
+	width: 247%;
+}
+
+.bookingStatus{
+	text-decoration: none;
+	color: black;
+}
+
+.bookingStatus :hover {
+	color: #228B22;
+}

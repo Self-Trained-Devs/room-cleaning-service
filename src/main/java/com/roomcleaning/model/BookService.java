@@ -18,6 +18,33 @@ public class BookService {
 	private String pinCode;
 	private String fromTime;
 	private String toTime;
+	private String cleanerId;
+	private String paymentStatus;
+	private String cleaningStatus;
+	
+	public String getCleaningStatus() {
+		return cleaningStatus;
+	}
+
+	public void setCleaningStatus(String cleaningStatus) {
+		this.cleaningStatus = cleaningStatus;
+	}
+
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public String getCleanerId() {
+		return cleanerId;
+	}
+
+	public void setCleanerId(String cleanerId) {
+		this.cleanerId = cleanerId;
+	}
 
 	public int getServiceId() {
 		return serviceId;
@@ -84,5 +111,13 @@ public class BookService {
 	}
 
 	private String contactNumber;
+
+	@Override
+	public String toString() {
+		return "BookService [serviceId=" + serviceId + ", userName=" + userName + ", roomCount=" + roomCount
+				+ ", Address=" + Address + ", pinCode=" + pinCode + ", fromTime=" + fromTime + ", toTime=" + toTime
+				+ ", cleanerId=" + cleanerId + ", paymentStatus=" + paymentStatus + ", contactNumber=" + contactNumber
+				+ "]";
+	}
 
 }

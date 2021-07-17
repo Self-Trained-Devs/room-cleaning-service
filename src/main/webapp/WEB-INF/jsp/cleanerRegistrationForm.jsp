@@ -59,6 +59,10 @@
 			<td></td>
 			<td><input type="submit" value="Register"></td>
 			</tr>
+			<tr>
+			<th></th>
+			<td><a href="/cleaner-login-form">Login here...</a></td>
+		</tr>
 		</table>
 	</form:form>
 </body>

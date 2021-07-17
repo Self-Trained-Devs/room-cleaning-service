@@ -35,6 +35,10 @@
 			<th></th>
 			<td><input type="submit" value="Login"></td>
 		</tr>
+		<tr>
+			<th></th>
+			<td><a href="/user-register">Register here...</a></td>
+		</tr>
 		</table>
 	</form:form>
 	<c:if test="${inValidUser}">

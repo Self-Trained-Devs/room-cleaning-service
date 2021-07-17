@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.roomcleaning.model.BookService;
 import com.roomcleaning.model.CleanerRegistrationForm;
 import com.roomcleaning.model.LoginModel;
 import com.roomcleaning.model.UserRegistrationForm;
@@ -97,5 +98,10 @@ public class CleanerService {
 		cleaner.setCleanerRegistrationStatus("R");
 		cleanerRepository.save(cleaner);
 		return false;
+	}
+	
+	public List<BookService> cleanerServiceList(String cleanerId){
+		List<BookService> getcleanerAssinedServices = cleanerRepository.getcleanerAssinedServices(cleanerId);
+		return getcleanerAssinedServices;
 	}
 }

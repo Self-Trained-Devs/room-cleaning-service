@@ -1,15 +1,14 @@
 package com.roomcleaning.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
-import javax.websocket.server.PathParam;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -143,8 +142,47 @@ public class AdminController {
 		Optional<BookService> bookServiceById = bookServiceService.getBookServiceById(serviceId);
 		BookService bookService = new BookService();
 		bookService = bookServiceById.get();
-		model.addAttribute("bookService", bookService);
+		model.addAttribute("serviceId", serviceId);
+		model.addAttribute("assignCleaner", bookService);
 		model.addAttribute("isBookingDetailedStatus", true);
+		if(bookService.getCleanerId() ==null || bookService.getCleanerId().isEmpty()) {
+		model.addAttribute("notAssigned", true);
+		model.addAttribute("bookService", bookService);
 		return "adminSuccess";
+		}
+		model.addAttribute("bookService", bookService);
+		model.addAttribute("isAssigned", true);
+		model.addAttribute("isCleanerAssigned", true);
+		return "adminSuccess";
+	} 
+	
+	@RequestMapping("/assignCleaner")
+	public String assignCleaner(@RequestParam("serviceId") int serviceId,
+			@ModelAttribute("assignCleaner") BookService bookservice, 
+			Model model) {
+		Optional<BookService> bookServiceById = bookServiceService.getBookServiceById(serviceId);
+		BookService bookService = new BookService();
+		bookService = bookServiceById.get();
+		if(bookService.getCleanerId() ==null || bookService.getCleanerId().isEmpty())
+		bookService.setCleanerId(bookservice.getCleanerId());
+		bookServiceService.saveBookService(bookService);
+		model.addAttribute("isBookingDetailedStatus", true);
+		model.addAttribute("serviceId", serviceId);
+		model.addAttribute("bookService", bookService);
+		model.addAttribute("isCleanerAssigned", true);
+		model.addAttribute("isAssigned", true);
+		return "adminSuccess";
+	}
+	
+	@ModelAttribute("cleanerList")
+	public Map<String,String> getCleanerList(){
+		Map<String,String> cleanerList= new TreeMap<>();
+		List<CleanerRegistrationForm> allCleanerRegistrationList = cleanerService.getAllCleanerRegistrationList();
+		if(!allCleanerRegistrationList.isEmpty()) {
+			for(CleanerRegistrationForm cleanerlist : allCleanerRegistrationList) {
+				cleanerList.put(cleanerlist.getCleanerId(), cleanerlist.getCleanerId());
+			}
+		}
+		return cleanerList;
 	}
 }

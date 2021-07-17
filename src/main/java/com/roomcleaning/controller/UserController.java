@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.roomcleaning.model.BookService;
 import com.roomcleaning.model.LoginModel;
+import com.roomcleaning.model.PaymentModel;
 import com.roomcleaning.model.UserRegistrationForm;
 import com.roomcleaning.service.BookServiceService;
 import com.roomcleaning.service.UserService;
@@ -34,7 +35,7 @@ public class UserController {
 	private BookServiceFormValidator bookServiceFormValidator;
 	@Autowired
 	private BookServiceService bookServiceService;
-	
+
 	@RequestMapping("/user-register")
 	public String registrationForm(Model model) {
 		model.addAttribute("registration", new UserRegistrationForm());
@@ -84,18 +85,18 @@ public class UserController {
 	public String cleanerLogout() {
 		return "redirect:/user-login-form";
 	}
-	
-	@RequestMapping(value="/book-service")
+
+	@RequestMapping(value = "/book-service")
 	public String bookService(@ModelAttribute("bookService") BookService bookSerice, Model model) {
 		model.addAttribute("isBookService", true);
 		return "userSuccess";
 	}
-	
-	@RequestMapping(value="/book-service", method=RequestMethod.POST)
-	public String postbookServiceClick(@ModelAttribute("bookService") BookService bookSerice, 
-			Model model, BindingResult errors) {
+
+	@RequestMapping(value = "/book-service", method = RequestMethod.POST)
+	public String postbookServiceClick(@ModelAttribute("bookService") BookService bookSerice, Model model,
+			BindingResult errors) {
 		bookServiceFormValidator.validate(bookSerice, errors);
-		if(!errors.hasErrors()) {
+		if (!errors.hasErrors()) {
 			bookServiceService.saveBookService(bookSerice);
 			model.addAttribute("isBooked", true);
 			model.addAttribute("BookedMessage", "Successfully Booked! Your service Id : " + bookSerice.getServiceId());
@@ -106,8 +107,8 @@ public class UserController {
 		model.addAttribute("isBookService", true);
 		return "userSuccess";
 	}
-	
-	@RequestMapping(value="/booking-status")
+
+	@RequestMapping(value = "/booking-status")
 	public String bookingStatus(Model model) {
 		String userName = (String) session.getAttribute("userName");
 		List<BookService> allBookService = bookServiceService.getAllBookService(userName);
@@ -115,14 +116,52 @@ public class UserController {
 		model.addAttribute("isBookingStatus", true);
 		return "userSuccess";
 	}
-	
-	@RequestMapping(value="/booking-service-in-detailed")
+
+	@RequestMapping(value = "/booking-service-in-detailed")
 	public String bookingServiceInDetailed(@RequestParam("serviceId") int serviceId, Model model) {
 		Optional<BookService> bookServiceById = bookServiceService.getBookServiceById(serviceId);
 		BookService bookService = new BookService();
 		bookService = bookServiceById.get();
 		model.addAttribute("bookService", bookService);
 		model.addAttribute("isBookingDetailedStatus", true);
+		model.addAttribute("serviceId", serviceId);
+		if (bookService.getCleanerId() == null || bookService.getCleanerId().isEmpty()) {
+			model.addAttribute("notAssigned", true);
+			model.addAttribute("assignStatus", "Yet to assign Cleaner");
+			return "userSuccess";
+		}
+		model.addAttribute("paymentDone", true);
+		if (bookService.getPaymentStatus() != null) {
+			if (bookService.getPaymentStatus().contentEquals("DONE")) {
+				model.addAttribute("isPaymentDone", true);
+				return "userSuccess";
+			}
+		}
+		model.addAttribute("isAssigned", true);
 		return "userSuccess";
+	}
+
+	@RequestMapping(value = "/make-payment")
+	public String makePayment(@RequestParam("serviceId") int serviceId, Model model) {
+		Optional<BookService> bookServiceById = bookServiceService.getBookServiceById(serviceId);
+		BookService bookService = new BookService();
+		model.addAttribute("serviceId", serviceId);
+		bookService = bookServiceById.get();
+		if (bookService.getPaymentStatus() == null || bookService.getPaymentStatus().isEmpty()) {
+			model.addAttribute("isPayment", true);
+			model.addAttribute("payment", new PaymentModel());
+			return "userSuccess";
+		}
+		return "userSuccess";
+	}
+
+	@RequestMapping(value = "/pay")
+	public String payForService(@RequestParam("serviceId") int serviceId, Model model) {
+		Optional<BookService> bookServiceById = bookServiceService.getBookServiceById(serviceId);
+		BookService bookService = new BookService();
+		bookService = bookServiceById.get();
+		bookService.setPaymentStatus("DONE");
+		bookServiceService.saveBookService(bookService);
+		return "redirect:/booking-service-in-detailed?serviceId=" + serviceId;
 	}
 }

@@ -206,11 +206,74 @@
 					<th></th>
 					<td></td>
 				</tr>
+				<tr>
+						<th><label>Assigned Cleaner : </label></th>
+						<c:if test="${isAssigned}">
+							<td><form:input path="cleanerId" type="cleanerId"
+									value="${bookService.cleanerId}" selected="true"
+									readonly="true" /></td>
+									
+						</c:if>
+						<c:if test="${paymentDone}">
+							<td><form:input path="cleanerId" type="cleanerId"
+									value="${bookService.cleanerId}" selected="true"
+									readonly="true" /></td>
+									
+						</c:if>
+						<c:if test="${notAssigned}">
+							<td><form:input path="cleanerId" type="cleanerId"
+									value="${assignStatus}" selected="true"
+									readonly="true" /></td>
+						</c:if>
+						<form:errors path="cleanerId" />
+					</tr>
+					<c:if test="${isAssigned}">
+						<tr>
+							<th></th>
+							<td><a class="btn btn-success" href="/make-payment?serviceId=${serviceId}">Pay</a></td>
+						</tr>
+						<tr>
+							<th></th>
+							<td><p>Payment is Pending..</p></td>
+						</tr>
+					</c:if>
+					<c:if test="${isPaymentDone}">
+						<tr>
+							<th></th>
+							<td><p>Great!, Payment is Done..</p></td>
+						</tr>
+					</c:if>
 			</form:form>
 		</table>
 	</c:if>
 	<c:if test="${isValidUser}">
 		<p style="color: green;">${userName}${validUser}</p>
+	</c:if>
+	<c:if test="${isPayment}">
+		<form:form action="/" modelAttribute="payment">
+			<table>
+				<tr>
+					<th><label>Enter Card Number : </label></th>
+					<td><form:input path="cardNumber"/></td>
+				</tr>
+				<tr>
+					<th><label>Enter Expiry Date : </label></th>
+					<td><form:input path="expiryDate"/></td>
+					<th></th>
+					<td></td>
+					<th><label>Enter CVV : </label></th>
+					<td><form:input path="cvv"/></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td></td>
+					<th></th>
+					<td></td>
+					<th></th>
+					<td><a class="btn btn-success" href="/pay?serviceId=${serviceId}">Pay</a></td>
+				</tr>
+			</table>
+		</form:form>
 	</c:if>
 </body>
 </html>

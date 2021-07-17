@@ -1,0 +1,31 @@
+.header2 {
+	display: flex;
+}
+
+.allCleaner {
+	padding:10px;
+	display: flex-grow;
+}
+
+.pendingCleaner {
+	padding:10px;
+	display: flex-grow;
+}
+
+.bookedServices {
+	padding:10px;
+	display: flex-grow;
+}
+
+.address{
+	width: 247%;
+}
+
+.bookingStatus{
+	text-decoration: none;
+	color: black;
+}
+
+.bookingStatus :hover {
+	color: #228B22;
+}

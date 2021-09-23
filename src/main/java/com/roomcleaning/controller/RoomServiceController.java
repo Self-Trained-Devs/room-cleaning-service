@@ -8,6 +8,6 @@ public class RoomServiceController {
 	
 	@RequestMapping("/")
 	public String home() {
-		return "home";
+		return "Welcome Home";
 	}
 }
